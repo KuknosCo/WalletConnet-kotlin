@@ -186,4 +186,16 @@ object WalletConnect {
         }
 
     }
+
+    fun setDeeplinkData(data: String,accountId:String,context: Context){
+        try {
+            val spPath: List<String> = data.split("/")!!
+            if (spPath[1].equals("connect")){
+                connect("//"+spPath[2],accountId,context)
+            }else{
+                var content = String(Base64.decode(spPath[1],Base64.DEFAULT))
+                manageRequests(JSONObject(content),context)
+            }
+        }catch (e:Exception){}
+    }
 }

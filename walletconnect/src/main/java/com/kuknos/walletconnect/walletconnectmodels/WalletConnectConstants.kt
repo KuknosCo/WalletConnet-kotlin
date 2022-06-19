@@ -14,5 +14,7 @@ class WalletConnectConstants {
         const val ACTION_DISCONNECT = "disconnect"
         const val ACTION_WALLET_CONNECT_REQUEST = "wallet-connect-request"
         const val DISCONNECT_SOCKET = "disconnect"
+        const val ACTION_SIGN_CMS = "pki-sign-cms"
+        const val ACTION_SIGN_pdf = "pki-sign-pdf"
     }
 }

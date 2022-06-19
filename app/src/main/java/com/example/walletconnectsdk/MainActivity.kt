@@ -19,6 +19,19 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        walletConnect = WalletConnect.init(this)
+        if (intent.data != null) {
+            try {
+                val uri = intent?.data
+                var data = uri?.getPath()?:""
+                walletConnect?.setDeeplinkData(data,"GCGKKROD333C2FYXFZGLEGGEXJPQES635PSQY64FMRXX7L73RROENSTV",this)
+                /*val spPath: List<String> = uri?.getPath()?.split("/")!!
+                spPath.forEachIndexed { index, s ->
+                    Log.i("MizbaneSDK","index : "+index+"    text : "+s )
+                }*/
+            } catch (e: Exception) {}
+        }
+
 
 
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
@@ -26,7 +39,7 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
         codeScanner = CodeScanner(this,scannerView)
         codeScanner.decodeCallback = DecodeCallback {
 
-            walletConnect = WalletConnect.init(this)
+
             walletConnect?.connect(it.text,"GCGKKROD333C2FYXFZGLEGGEXJPQES635PSQY64FMRXX7L73RROENSTV",this)
 
             /*walletConnect?.send()
@@ -36,6 +49,19 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
         scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
+
+
+        /*walletConnect = WalletConnect.init(object:WalletConnectCallback{
+            override fun onRequestListener(projectId: String, actionType: String, data: Any) {
+
+            }
+            override fun onConnected() {
+
+            }
+            override fun onDisconnected() {
+
+            }
+        })*/
 
     }
 
@@ -54,7 +80,7 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
     override fun onRequestListener(projectId: String, actionType: String, data: Any) {
         var dataString = data as String
         Log.i("MizbaneSDK","type = "+actionType+"   data = "+dataString)
-        //walletConnect?.send(projectId,null,actionType,"",true,this)
+        walletConnect?.send(projectId,null,actionType,"",false,this)
     }
 
     override fun onConnected() {
