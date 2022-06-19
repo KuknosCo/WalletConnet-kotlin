@@ -27,42 +27,43 @@ object WalletConnect {
     }
 
     fun connect(data :String,accountId:String,context: Context){
-        var split = data.split("//")
-        var content = String(Base64.decode(split[1],Base64.DEFAULT))
-        Log.i("MyLog",content)
+        try {
+            var split = data.split("//")
+            var content = String(Base64.decode(split[1],Base64.DEFAULT))
+            Log.i("KuknosLog",content)
 
-        var json = JSONObject(content)
-        var key = json.getString("key")
-        var project_id = json.getString("project_id")
-        var address = json.getString("relayServer")
-        Log.i("MyLog","address "+address)
+            var json = JSONObject(content)
+            var key = json.getString("key")
+            var project_id = json.getString("project_id")
+            var address = json.getString("relayServer")
+            Log.i("KuknosLog","address "+address)
 
-        val options = IO.Options.builder().setAuth(Collections.singletonMap("project_id", accountId)).build()
-        val uri = URI.create(address)
-        socket = IO.socket(uri, options)
-        socket?.connect()
+            val options = IO.Options.builder().setAuth(Collections.singletonMap("project_id", accountId)).build()
+            val uri = URI.create(address)
+            socket = IO.socket(uri, options)
+            socket?.connect()
 
-        socket?.on(Socket.EVENT_CONNECT, Emitter.Listener {
-            Log.i("MyLog","connected")
-            WalletConnectMemory.save(project_id,key,context)
-            startListen(context)
-            Log.i("MyLog","pId : "+project_id)
-            pId = project_id
-            send(project_id,createGetAccountJson(accountId), WalletConnectConstants.ACTION_GET_ACCOUNT,"",true,context)
-            sendConnectRequest(project_id,accountId,context)
+            socket?.on(Socket.EVENT_CONNECT, Emitter.Listener {
+                Log.i("KuknosLog","connected")
+                WalletConnectMemory.save(project_id,key,context)
+                startListen(context)
+                Log.i("KuknosLog","pId : "+project_id)
+                pId = project_id
+                send(project_id,createGetAccountJson(accountId), WalletConnectConstants.ACTION_GET_ACCOUNT,"",true,context)
+                sendConnectRequest(project_id,accountId,context)
 
-            listener?.let {
-                it.onConnected()
-            }
-        })
-        socket?.on(Socket.EVENT_DISCONNECT, Emitter.Listener {
-            Log.i("MyLog","disconnect")
-            pId = null
-            listener?.let {
-                it.onDisconnected()
-            }
-        })
-
+                listener?.let {
+                    it.onConnected()
+                }
+            })
+            socket?.on(Socket.EVENT_DISCONNECT, Emitter.Listener {
+                Log.i("KuknosLog","disconnect")
+                pId = null
+                listener?.let {
+                    it.onDisconnected()
+                }
+            })
+        }catch (e:Exception){}
     }
 
     fun disconnect(){
@@ -72,9 +73,9 @@ object WalletConnect {
     }
 
     private fun startListen(context: Context){
-        Log.i("MyLog","A")
+        Log.i("KuknosLog","A")
         socket?.let {
-            Log.i("MyLog","B")
+            Log.i("KuknosLog","B")
             it.on("receive_data", Emitter.Listener {
                 val json = it[0] as JSONObject
 
@@ -94,7 +95,7 @@ object WalletConnect {
         val gson = Gson()
         val toJson = gson.toJson(model)
         val json = JSONObject(toJson)
-        Log.i("sendmodel","0 : "+json)
+        Log.i("KuknosLog","0 : "+json)
         socket?.emit("send_data", json)
     }
 
@@ -105,7 +106,7 @@ object WalletConnect {
         val gson = Gson()
         val toJson = gson.toJson(model)
         val json = JSONObject(toJson)
-        Log.i("sendmodel","send : "+json)
+        Log.i("KuknosLog","send : "+json)
         socket?.emit("send_data", json)
     }
 
@@ -113,9 +114,9 @@ object WalletConnect {
 
 
         var key = getMD5EncryptedString(WalletConnectMemory.load(project_id,context))
-        Log.i("sendmodel","final key : "+key)
+        Log.i("KuknosLog","final key : "+key)
         val encrypt = AESEncryption(key).encrypt(data)
-        Log.i("sendmodel","encrypt : "+encrypt)
+        Log.i("KuknosLog","encrypt : "+encrypt)
         var replace = encrypt.trim().replace("\n","")
         return replace
 
@@ -123,9 +124,9 @@ object WalletConnect {
 
     private fun decrypt(context: Context,data: String,project_id: String):String{
         var key = getMD5EncryptedString(WalletConnectMemory.load(project_id,context))
-        Log.i("hjgklk","final key : "+key)
+//        Log.i("KuknosLog","final key : "+key)
         var decrypt = AESEncryption(key).decrypt(data)
-        Log.i("hjgklk","decrypt : "+decrypt)
+//        Log.i("KuknosLog","decrypt : "+decrypt)
         return decrypt
     }
 
@@ -163,7 +164,7 @@ object WalletConnect {
         val gson = Gson()
         val socketRequestModel = gson.fromJson(jsonRequest.toString(), SocketRequestModel::class.java)
         if (!socketRequestModel.type.equals(WalletConnectConstants.ACTION_PING))
-            Log.i("MyLog","receive this : "+jsonRequest)
+            Log.i("KuknosLog","receive this : "+jsonRequest)
 
         context?.let { cntx ->
             when(socketRequestModel.type){

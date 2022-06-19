@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
     override fun onRequestListener(projectId: String, actionType: String, data: Any) {
         var dataString = data as String
         Log.i("MizbaneSDK","type = "+actionType+"   data = "+dataString)
-        walletConnect?.send(projectId,null,actionType,"",true,this)
+        //walletConnect?.send(projectId,null,actionType,"",true,this)
     }
 
     override fun onConnected() {
