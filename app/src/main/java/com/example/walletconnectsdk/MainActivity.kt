@@ -1,16 +1,15 @@
 package com.example.walletconnectsdk
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.webkit.WebView
+import androidx.appcompat.app.AppCompatActivity
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.kuknos.walletconnect.WalletConnect
 import com.kuknos.walletconnect.WalletConnectCallback
-import java.math.BigInteger
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 class MainActivity : AppCompatActivity(), WalletConnectCallback{
     private lateinit var codeScanner: CodeScanner
@@ -20,16 +19,21 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         walletConnect = WalletConnect.init(this)
+        Log.i("MizbaneSDK","C" )
         if (intent.data != null) {
+            Log.i("MizbaneSDK","D" )
             try {
                 val uri = intent?.data
                 var data = uri?.getPath()?:""
+                Log.i("MizbaneSDK","Data "+data )
                 walletConnect?.setDeeplinkData(data,"GCGKKROD333C2FYXFZGLEGGEXJPQES635PSQY64FMRXX7L73RROENSTV",this)
                 /*val spPath: List<String> = uri?.getPath()?.split("/")!!
                 spPath.forEachIndexed { index, s ->
                     Log.i("MizbaneSDK","index : "+index+"    text : "+s )
                 }*/
-            } catch (e: Exception) {}
+            } catch (e: Exception) {
+                Log.i("MizbaneSDK","E "+e.message )
+            }
         }
 
 
@@ -63,7 +67,11 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
             }
         })*/
 
+//        runJs()
+
     }
+
+
 
 
     override fun onResume() {
@@ -91,4 +99,10 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
 
     }
 
+
+
+
+    private fun runJs() {
+        startActivity(Intent(this,WebViewActivity::class.java))
+    }
 }

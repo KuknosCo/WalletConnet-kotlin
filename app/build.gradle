@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id'kotlin-android'
+    id'kotlin-android-extensions'
+    id'kotlin-kapt'
 }
 
 android {
@@ -45,5 +48,5 @@ dependencies {
 
     implementation ('io.socket:socket.io-client:2.0.1')
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
-
+    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
 }

@@ -38,7 +38,7 @@ object WalletConnect {
             var address = json.getString("relayServer")
             Log.i("KuknosLog","address "+address)
 
-            val options = IO.Options.builder().setAuth(Collections.singletonMap("project_id", accountId)).build()
+            val options = IO.Options.builder().setQuery("project_id="+accountId).build()
             val uri = URI.create(address)
             socket = IO.socket(uri, options)
             socket?.connect()
@@ -189,13 +189,19 @@ object WalletConnect {
 
     fun setDeeplinkData(data: String,accountId:String,context: Context){
         try {
-            val spPath: List<String> = data.split("/")!!
-            if (spPath[1].equals("connect")){
-                connect(spPath[2],accountId,context)
+
+            if (data.contains("connect")){
+                val spPath: List<String> = data.split(":")!!
+                connect(spPath[1],accountId,context)
             }else{
+                val spPath: List<String> = data.split("/")!!
                 var content = String(Base64.decode(spPath[1],Base64.DEFAULT))
                 manageRequests(JSONObject(content),context)
             }
         }catch (e:Exception){}
+    }
+
+    fun getJsInterface(context: Context,publicKey : String):JavaScriptInterface?{
+        return JavaScriptInterface(context,publicKey,this)
     }
 }
