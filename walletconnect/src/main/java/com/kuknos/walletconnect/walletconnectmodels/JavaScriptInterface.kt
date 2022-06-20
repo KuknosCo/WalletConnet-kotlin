@@ -11,7 +11,7 @@ class JavaScriptInterface (var context: Context,var publicKey : String,var walle
     fun connectRequest(data: String?) {
         Log.i("KuknosLog","data : "+data)
         data?.let {
-            walletConnect.connect(it,publicKey,context)
+            walletConnect.connect(it,publicKey,context,null)
         }
     }
 }

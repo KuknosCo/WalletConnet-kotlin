@@ -26,7 +26,7 @@ object WalletConnect {
         return this
     }
 
-    fun connect(data :String,accountId:String,context: Context){
+    fun connect(data :String,accountId:String,context: Context,certificate: String?){
         try {
             var split = data.split("//")
             var content = String(Base64.decode(split[1],Base64.DEFAULT))
@@ -49,7 +49,7 @@ object WalletConnect {
                 startListen(context)
                 Log.i("KuknosLog","pId : "+project_id)
                 pId = project_id
-                send(project_id,createGetAccountJson(accountId), WalletConnectConstants.ACTION_GET_ACCOUNT,"",true,context)
+                send(project_id,createGetAccountJson(accountId,certificate), WalletConnectConstants.ACTION_GET_ACCOUNT,"",true,context)
                 sendConnectRequest(project_id,accountId,context)
 
                 listener?.let {
@@ -136,6 +136,15 @@ object WalletConnect {
         return json
     }
 
+    private fun createGetAccountJson(public : String,certificate:String?):JSONObject{
+        val json = JSONObject()
+        json.put("public",public)
+        certificate?.let {
+            json.put("certificate",certificate)
+        }
+        return json
+    }
+
     private fun createAccountJson(public : String):JSONObject{
         val json = JSONObject()
         json.put("project_id",public)
@@ -192,7 +201,7 @@ object WalletConnect {
 
             if (data.contains("connect")){
                 val spPath: List<String> = data.split(":")!!
-                connect(spPath[1],accountId,context)
+                connect(spPath[1],accountId,context,null)
             }else{
                 val spPath: List<String> = data.split("/")!!
                 var content = String(Base64.decode(spPath[1],Base64.DEFAULT))

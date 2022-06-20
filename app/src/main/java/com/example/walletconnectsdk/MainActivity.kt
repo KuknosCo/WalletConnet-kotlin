@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
         codeScanner.decodeCallback = DecodeCallback {
 
 
-            walletConnect?.connect(it.text,"GCGKKROD333C2FYXFZGLEGGEXJPQES635PSQY64FMRXX7L73RROENSTV",this)
+            walletConnect?.connect(it.text,"GCGKKROD333C2FYXFZGLEGGEXJPQES635PSQY64FMRXX7L73RROENSTV",this,null)
 
             /*walletConnect?.send()
             walletConnect?.disconnect()*/
