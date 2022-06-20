@@ -101,7 +101,7 @@ object WalletConnect {
 
     fun send(project_id: String, data: JSONObject?, type: String,message: String,status:Boolean,context: Context){
         var status = if (status) "submit" else "reject"
-        val responseModel = SocketResponseModel(status, message, type, encrypt(project_id,data.toString(),context))
+        val responseModel = SocketResponseModel(status, message, type, if(data != null) encrypt(project_id,data.toString(),context) else "")
         val model = SocketSubmitModel(responseModel, project_id)
         val gson = Gson()
         val toJson = gson.toJson(model)
@@ -191,7 +191,7 @@ object WalletConnect {
         try {
             val spPath: List<String> = data.split("/")!!
             if (spPath[1].equals("connect")){
-                connect("//"+spPath[2],accountId,context)
+                connect(spPath[2],accountId,context)
             }else{
                 var content = String(Base64.decode(spPath[1],Base64.DEFAULT))
                 manageRequests(JSONObject(content),context)
