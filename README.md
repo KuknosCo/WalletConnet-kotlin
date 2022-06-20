@@ -2,7 +2,7 @@
   ``` kotlin
     maven { url 'https://jitpack.io' }
 
-    implementation 'com.github.KuknosCo:WalletConnet-kotlin:1.2.0'
+    implementation 'com.github.KuknosCo:WalletConnet-kotlin:1.2.1'
   ```
 
 ## Initiate
