@@ -40,7 +40,7 @@ link 'https://wc-deeplink.kuknos.ir/{DATA}'
   ``` kotlin
     walletConnect?.setDeeplinkData(data,publicKey,context)
   ```
-## ActionsTypes
+## ActionTypes
 ``` kotlin
     val ACTION_GET_ACCOUNT = "account-publickey"
     val ACTION_SIGN_DATA = "sign-data"

@@ -99,9 +99,6 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
 
     }
 
-
-
-
     private fun runJs() {
         startActivity(Intent(this,WebViewActivity::class.java))
     }
