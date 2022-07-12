@@ -114,7 +114,7 @@ object WalletConnect {
 
 
         var key = getMD5EncryptedString(WalletConnectMemory.load(project_id,context))
-        Log.i("KuknosLog","final key : "+key)
+        Log.i("KuknosLog","final key : "+key +"   "+data)
         val encrypt = AESEncryption(key).encrypt(data)
         Log.i("KuknosLog","encrypt : "+encrypt)
         var replace = encrypt.trim().replace("\n","")
@@ -188,7 +188,7 @@ object WalletConnect {
                 else -> {
                     listener?.let {
                         var data = decrypt(context,socketRequestModel.data as String,socketRequestModel.client?.project_id?:"")
-                        it.onRequestListener(socketRequestModel.client?.project_id?:"",socketRequestModel.type?:"",data)
+                        it.onRequestListener(socketRequestModel.client?.project_id?:"",socketRequestModel.type?:"",data,socketRequestModel.client?.network)
                     }
                 }
             }

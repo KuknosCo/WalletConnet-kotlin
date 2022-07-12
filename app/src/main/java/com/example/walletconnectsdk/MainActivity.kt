@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
@@ -85,10 +86,20 @@ class MainActivity : AppCompatActivity(), WalletConnectCallback{
     }
 
 
-    override fun onRequestListener(projectId: String, actionType: String, data: Any) {
+    override fun onRequestListener(projectId: String, actionType: String, data: Any,network:String?) {
         var dataString = data as String
+        try {
+            runOnUiThread {
+                var m = "project id = "+projectId +"\n"+"\n"+"action type = "+actionType+"\n"+"\n"+"data = "+dataString
+                Toast.makeText(this,m,Toast.LENGTH_LONG).show()
+            }
+        }catch (e:Exception){
+            Log.i("MizbaneSDK","e = "+e.message)
+        }
         Log.i("MizbaneSDK","type = "+actionType+"   data = "+dataString)
         walletConnect?.send(projectId,null,actionType,"",false,this)
+
+
     }
 
     override fun onConnected() {
